@@ -1,11 +1,7 @@
-import { searchImages } from './pixabay-api.js';
+import axios from 'axios';
+import Notiflix from 'notiflix';
 
-const form = document.getElementById('search-form');
-const gallery = document.querySelector('.gallery');
-const loadMoreButton = document.querySelector('.load-more');
-
-let currentPage = 1;
-let currentQuery = '';
+const apiKey = '39735160-014c6c17620a2b57de6626257';
 
 // Funcția pentru afișarea imaginilor
 function displayImages(images) {
@@ -49,23 +45,27 @@ function displayImages(images) {
   });
 }
 
-// Funcția pentru gestionarea căutării
-function handleSearch(event) {
-  event.preventDefault();
-  gallery.innerHTML = ''; // Șterge imaginile existente din galerie
-  currentQuery = form.searchQuery.value.trim(); // Obține valoarea căutării
-  currentPage = 1; // Resetează pagina la 1 pentru o nouă căutare
-  searchImages(currentQuery, currentPage);
+// Funcția pentru căutare imagini
+function searchImages(query, page = 1) {
+  const apiUrl = `https://pixabay.com/api/?key=${apiKey}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}`;
+
+  return axios
+    .get(apiUrl)
+    .then(response => {
+      const data = response.data;
+      const images = data.hits;
+
+      if (images.length === 0) {
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+      } else {
+        displayImages(images);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data from Pixabay API:', error);
+    });
 }
 
-// Funcția pentru gestionarea încărcării suplimentare
-function handleLoadMore() {
-  currentPage += 1; // Incrementăm pagina pentru încărcare suplimentară
-  searchImages(currentQuery, currentPage);
-}
-
-// Adaugă eveniment pentru formularul de căutare
-form.addEventListener('submit', handleSearch);
-
-// Adaugă eveniment pentru butonul "Load more"
-loadMoreButton.addEventListener('click', handleLoadMore);
+export { searchImages };

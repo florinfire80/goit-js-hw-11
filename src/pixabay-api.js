@@ -5,7 +5,7 @@ const apiKey = '39735160-014c6c17620a2b57de6626257';
 
 // Funcția pentru căutare imagini
 
-export async function searchImages(query, page = 1) {
+export async function searchImages(query, page = 1, gallery) {
   const apiUrl = `https://pixabay.com/api/?key=${apiKey}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}`;
 
   try {
@@ -18,6 +18,9 @@ export async function searchImages(query, page = 1) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
+    } else {
+      // Aici se apelează funcția displayImages pentru a afișa imaginile în galerie
+      displayImages(images, gallery);
     }
 
     return { images, totalHits };
@@ -28,7 +31,7 @@ export async function searchImages(query, page = 1) {
 }
 
 // Funcția pentru afișarea imaginilor
-function displayImages(images) {
+function displayImages(images, gallery) {
   images.forEach(image => {
     const photoCard = document.createElement('div');
     photoCard.classList.add('photo-card');

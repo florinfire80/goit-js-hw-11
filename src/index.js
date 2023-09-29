@@ -60,7 +60,7 @@ function handleSearch(event) {
   loadMoreButton.style.display = 'none';
 
   // Apelează funcția searchImages pentru a efectua căutarea
-  searchImages(currentQuery, currentPage);
+  searchImages(currentQuery, currentPage, gallery);
 }
 
 // Adaugă eveniment pentru formularul de căutare

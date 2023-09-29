@@ -55,17 +55,25 @@ function handleSearch(event) {
   gallery.innerHTML = ''; // Șterge imaginile existente din galerie
   currentQuery = form.searchQuery.value.trim(); // Obține valoarea căutării
   currentPage = 1; // Resetează pagina la 1 pentru o nouă căutare
-  searchImages(currentQuery, currentPage);
-}
 
-// Funcția pentru gestionarea încărcării suplimentare
-function handleLoadMore() {
-  currentPage += 1; // Incrementăm pagina pentru încărcare suplimentară
+  // Ascunde butonul "Load more" după o nouă căutare
+  loadMoreButton.style.display = 'none';
+
+  // Apelează funcția searchImages pentru a efectua căutarea
   searchImages(currentQuery, currentPage);
 }
 
 // Adaugă eveniment pentru formularul de căutare
 form.addEventListener('submit', handleSearch);
+
+// Funcția pentru gestionarea încărcării suplimentare
+function handleLoadMore() {
+  currentPage += 1; // Incrementăm pagina pentru încărcare suplimentară
+  searchImages(currentQuery, currentPage);
+
+  // Afișează butonul "Load more" după solicitarea de încărcare suplimentară
+  loadMoreButton.style.display = 'block';
+}
 
 // Adaugă eveniment pentru butonul "Load more"
 loadMoreButton.addEventListener('click', handleLoadMore);
